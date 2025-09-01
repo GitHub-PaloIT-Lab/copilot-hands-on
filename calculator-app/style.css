@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', 'SF Pro Text', 'Helvetica Neue', 'Roboto', 'Arial Unicode MS', 'DejaVu Sans', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
@@ -56,6 +56,8 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Enhanced font stack for better symbol support */
+    font-family: 'Segoe UI Symbol', 'SF Pro Text', 'Helvetica Neue', 'Roboto', 'Arial Unicode MS', 'Symbols Nerd Font', 'DejaVu Sans', 'Noto Sans Symbols', 'Apple Symbols', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .btn:hover {
@@ -118,6 +120,19 @@ body {
 
 .btn.equals:active {
     background: #AA5500;
+}
+
+/* Enhanced styling for mathematical symbol buttons */
+.btn[data-operator], 
+.btn:contains("⌫"), 
+button[onclick*="deleteLast"] {
+    /* Ensure mathematical symbols render properly */
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Additional symbol font support */
+    font-family: 'Segoe UI Symbol', 'Mathematical Alphanumeric Symbols', 'SF Pro Text', 'Helvetica Neue', 'Roboto', 'Arial Unicode MS', 'Symbols Nerd Font', 'DejaVu Sans', 'Noto Sans Symbols', 'Apple Symbols', 'Segoe UI', sans-serif;
 }
 
 /* Responsive design */
