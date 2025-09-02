@@ -59,7 +59,7 @@ document.addEventListener('keydown', function(event) {
     const key = event.key;
     
     // Numbers and decimal point
-    if (key >= '0' && key <= '9' || key === '.') {
+    if ((key >= '0' && key <= '9') || key === '.') {
         appendToDisplay(key);
     }
     
