@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Cart System Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .product-section {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .product-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .product-card h3 {
+            margin: 0 0 10px 0;
+            color: #34495e;
+        }
+        
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 5px 0;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        .remove-btn {
+            background: #e74c3c;
+        }
+        
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+        
+        .cart-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .summary {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            border-top: 1px solid #34495e;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        .discount {
+            color: #2ecc71;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .clear-btn {
+            background: #95a5a6;
+        }
+        
+        .clear-btn:hover {
+            background: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 E-commerce Cart System Demo</h1>
+        
+        <!-- สินค้าตัวอย่าง -->
+        <div class="product-section">
+            <h2>สินค้าในร้าน</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <h3>โทรศัพท์มือถือ</h3>
+                    <div class="price">฿15,000</div>
+                    <button onclick="addToCart('phone', 'โทรศัพท์มือถือ', 15000)">เพิ่มลงตะกร้า</button>
+                </div>
+                
+                <div class="product-card">
+                    <h3>หูฟัง Bluetooth</h3>
+                    <div class="price">฿2,500</div>
+                    <button onclick="addToCart('headphone', 'หูฟัง Bluetooth', 2500)">เพิ่มลงตะกร้า</button>
+                </div>
+                
+                <div class="product-card">
+                    <h3>เคสโทรศัพท์</h3>
+                    <div class="price">฿350</div>
+                    <button onclick="addToCart('case', 'เคสโทรศัพท์', 350)">เพิ่มลงตะกร้า</button>
+                </div>
+                
+                <div class="product-card">
+                    <h3>สายชาร์จ USB-C</h3>
+                    <div class="price">฿450</div>
+                    <button onclick="addToCart('cable', 'สายชาร์จ USB-C', 450)">เพิ่มลงตะกร้า</button>
+                </div>
+                
+                <div class="product-card">
+                    <h3>แท่นวางโทรศัพท์</h3>
+                    <div class="price">฿750</div>
+                    <button onclick="addToCart('stand', 'แท่นวางโทรศัพท์', 750)">เพิ่มลงตะกร้า</button>
+                </div>
+                
+                <div class="product-card">
+                    <h3>พาวเวอร์แบงค์</h3>
+                    <div class="price">฿1,200</div>
+                    <button onclick="addToCart('powerbank', 'พาวเวอร์แบงค์', 1200)">เพิ่มลงตะกร้า</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ตะกร้าสินค้า -->
+        <div class="cart-section">
+            <h2>ตะกร้าของคุณ</h2>
+            <div id="cart-items"></div>
+        </div>
+        
+        <!-- สรุปคำสั่งซื้อ -->
+        <div class="summary" id="order-summary"></div>
+        
+        <!-- ปุ่มจัดการ -->
+        <div class="actions">
+            <button class="clear-btn" onclick="clearCart()">ล้างตะกร้า</button>
+        </div>
+    </div>
+
+    <script src="cart-system.js"></script>
+    <script>
+        // สร้าง instance ของตะกร้า
+        const cart = new ShoppingCart();
+        
+        // ฟังก์ชันเพิ่มสินค้าลงตะกร้า
+        function addToCart(id, name, price) {
+            cart.addItem(id, name, price, 1);
+            updateDisplay();
+        }
+        
+        // ฟังก์ชันลบสินค้าออกจากตะกร้า
+        function removeFromCart(id) {
+            cart.removeItem(id);
+            updateDisplay();
+        }
+        
+        // ฟังก์ชันอัพเดทจำนวน
+        function updateQuantity(id, quantity) {
+            cart.updateQuantity(id, parseInt(quantity));
+            updateDisplay();
+        }
+        
+        // ฟังก์ชันล้างตะกร้า
+        function clearCart() {
+            cart.clearCart();
+            updateDisplay();
+        }
+        
+        // ฟังก์ชันแสดงผลตะกร้า
+        function updateDisplay() {
+            const summary = cart.getOrderSummary();
+            
+            // แสดงรายการสินค้าในตะกร้า
+            const cartItemsDiv = document.getElementById('cart-items');
+            
+            if (summary.items.length === 0) {
+                cartItemsDiv.innerHTML = '<div class="empty-cart">ตะกร้าว่างเปล่า</div>';
+            } else {
+                cartItemsDiv.innerHTML = summary.items.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <span>฿${item.price.toLocaleString()} x ${item.quantity} = ฿${item.itemTotal.toLocaleString()}</span>
+                        </div>
+                        <div class="quantity-controls">
+                            <button onclick="updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                            <input type="number" class="quantity-input" value="${item.quantity}" 
+                                   onchange="updateQuantity('${item.id}', this.value)" min="1">
+                            <button onclick="updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                            <button class="remove-btn" onclick="removeFromCart('${item.id}')">ลบ</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // แสดงสรุปคำสั่งซื้อ
+            const summaryDiv = document.getElementById('order-summary');
+            
+            if (summary.items.length === 0) {
+                summaryDiv.style.display = 'none';
+            } else {
+                summaryDiv.style.display = 'block';
+                summaryDiv.innerHTML = `
+                    <h3>สรุปคำสั่งซื้อ</h3>
+                    <div class="summary-line">
+                        <span>ราคารวมก่อนส่วนลด:</span>
+                        <span>฿${summary.subtotal.toLocaleString()}</span>
+                    </div>
+                    ${summary.hasDiscount ? `
+                        <div class="summary-line discount">
+                            <span>ส่วนลด 10% (ซื้อครบ ฿1,000):</span>
+                            <span>-฿${summary.discount.toLocaleString()}</span>
+                        </div>
+                    ` : ''}
+                    <div class="summary-line total">
+                        <span>ราคารวมสุทธิ:</span>
+                        <span>฿${summary.total.toLocaleString()}</span>
+                    </div>
+                    ${!summary.hasDiscount && summary.subtotal > 0 ? `
+                        <div style="margin-top: 10px; font-size: 14px; color: #f39c12;">
+                            💡 ซื้อเพิ่มอีก ฿${(1000 - summary.subtotal).toLocaleString()} เพื่อรับส่วนลด 10%
+                        </div>
+                    ` : ''}
+                `;
+            }
+        }
+        
+        // แสดงผลครั้งแรก
+        updateDisplay();
+    </script>
+</body>
+</html>
