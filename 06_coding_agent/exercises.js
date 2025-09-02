@@ -35,8 +35,13 @@
 // - Phone number validation (รองรับรูปแบบไทย)
 // - Credit card validation (Luhn algorithm)
 // - URL validation
-// - SQL injection prevention
+// - SQL injection prevention (ดูตัวอย่างใน sql-injection-example.js)
 // - XSS prevention
+
+// SQL Injection Prevention Example:
+// ❌ ไม่ปลอดภัย: const query = `SELECT * FROM users WHERE username = '${username}'`;
+// ✅ ปลอดภัย: const query = 'SELECT * FROM users WHERE username = ?';
+//              connection.query(query, [username], callback);
 
 
 // === แบบฝึกหัดที่ 5: Performance Monitoring ===
