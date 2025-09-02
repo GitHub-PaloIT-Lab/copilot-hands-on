@@ -8,12 +8,8 @@ Set up the React frontend application with basic structure and Socket.io client 
 ```
 Set up the React frontend:
 
-1. Create client/package.json with React dependencies
-2. Create client/public/index.html
-3. Create client/src/index.js and index.css (basic setup)
-4. Create basic App.js with simple "Chat App" header
-5. Create App.css with basic styling
-6. Test React app starts on port 3000
+1. Create client/ with Create React App
+2. Test React app starts on port 3000
 
 Focus: Basic React app that renders without any chat functionality.
 ```
