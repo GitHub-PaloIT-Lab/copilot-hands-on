@@ -1,43 +1,63 @@
--- Database schema with security issues
+-- User Management Database Schema
+-- WARNING: This schema has security issues that need to be reviewed
 
--- SECURITY ISSUE: No proper indexing for performance
--- SECURITY ISSUE: No constraints on sensitive data
-CREATE DATABASE IF NOT EXISTS userdb;
-USE userdb;
+CREATE DATABASE IF NOT EXISTS user_management;
+USE user_management;
 
--- SECURITY ISSUE: Storing sensitive data without encryption
+-- Users table with potential security issues
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL,  -- ISSUE: Should be hashed
-    email VARCHAR(100),
-    ssn VARCHAR(11),  -- SECURITY ISSUE: Storing SSN in plain text
-    credit_card VARCHAR(16),  -- SECURITY ISSUE: Storing credit card numbers
-    phone VARCHAR(15),
-    address TEXT,
-    bio TEXT,  -- VULNERABILITY: No length limit, potential for XSS storage
-    is_admin BOOLEAN DEFAULT FALSE,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,  -- Should be hashed but validation missing
+    role ENUM('admin', 'user') DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMP,
-    failed_login_attempts INT DEFAULT 0,  -- No automatic lockout mechanism
-    
-    -- MISSING: No unique constraints
-    -- MISSING: No proper indexing for queries
-    -- MISSING: No foreign key constraints
-    INDEX(username)  -- Basic index only
+    last_login TIMESTAMP NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    reset_token VARCHAR(255) NULL,  -- Potential security issue: no expiration
+    api_key VARCHAR(100) NULL       -- Stored in plain text
 );
 
--- SECURITY ISSUE: Default admin user with weak credentials
-INSERT INTO users (username, password, email, ssn, is_admin) VALUES 
-('admin', 'admin', 'admin@example.com', '123-45-6789', TRUE),
-('test', 'test123', 'test@example.com', '987-65-4321', FALSE),
-('guest', 'guest', 'guest@example.com', '555-55-5555', FALSE);
+-- Sessions table - missing security features
+CREATE TABLE user_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NULL,      -- No automatic cleanup
+    ip_address VARCHAR(45),         -- No validation
+    user_agent TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
--- SECURITY ISSUE: Overly permissive user privileges
--- CREATE USER 'webapp'@'%' IDENTIFIED BY 'webapp123';
--- GRANT ALL PRIVILEGES ON userdb.* TO 'webapp'@'%';
+-- Audit log table - missing important fields
+CREATE TABLE audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    action VARCHAR(100),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+    -- Missing: IP address, user agent, detailed action data
+);
 
--- MISSING: No audit trail table
--- MISSING: No session management table
--- MISSING: No password history table
--- MISSING: No role-based access control tables
+-- Insert test data with security issues
+INSERT INTO users (username, email, password, role, api_key) VALUES 
+('admin', 'admin@example.com', 'admin123', 'admin', 'api-key-123'),  -- Plain text password
+('john_doe', 'john@example.com', 'password', 'user', 'api-key-456'),  -- Weak password
+('jane_smith', 'jane@example.com', 'jane2023', 'user', NULL);
+
+-- Problematic indexes - missing security considerations
+CREATE INDEX idx_username ON users(username);
+CREATE INDEX idx_email ON users(email);
+-- Missing: Indexes on security-related fields
+
+-- Stored procedure with SQL injection vulnerability
+DELIMITER //
+CREATE PROCEDURE GetUserByEmail(IN user_email VARCHAR(100))
+BEGIN
+    SET @sql = CONCAT('SELECT * FROM users WHERE email = "', user_email, '"');
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END //
+DELIMITER ;
