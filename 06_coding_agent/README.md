@@ -30,6 +30,40 @@
 ### การใช้เป็น Code Reviewer
 ให้ Copilot ตรวจสอบโค้ดและแนะนำการปรับปรุง
 
+## ตัวอย่าง: SQL Injection Prevention
+
+ในโฟลเดอร์นี้มีตัวอย่างการแก้ไขปัญหา SQL injection ด้วยการใช้ parameterized queries
+
+### ไฟล์ที่สำคัญ
+
+- `sql-injection-example.js` - ตัวอย่างการแก้ไขปัญหา SQL injection
+- `sql-injection-test.js` - Test สำหรับตรวจสอบการป้องกัน SQL injection
+- `exercises.js` - แบบฝึกหัดต่าง ๆ สำหรับ Coding Agent
+
+### การแก้ไขปัญหา SQL Injection
+
+#### ❌ วิธีที่ไม่ปลอดภัย (String Concatenation)
+```javascript
+const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+connection.query(query, callback);
+```
+
+#### ✅ วิธีที่ปลอดภัย (Parameterized Queries)
+```javascript
+const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+connection.query(query, [username, password], callback);
+```
+
+### วิธีการรันตัวอย่าง
+
+```bash
+# รันการสาธิต SQL injection
+node sql-injection-example.js
+
+# รัน tests
+node sql-injection-test.js
+```
+
 ## เทคนิคการใช้งาน
 - เขียน requirement ที่ชัดเจนและเฉพาะเจาะจง
 - แบ่งปัญหาใหญ่เป็นปัญหาเล็กๆ
