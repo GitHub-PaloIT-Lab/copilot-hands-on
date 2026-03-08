@@ -1,0 +1,128 @@
+.message {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.message.message-own {
+  flex-direction: row-reverse;
+}
+
+.message.message-system {
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.message.message-last {
+  margin-bottom: 12px;
+}
+
+.message-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.message-avatar-placeholder {
+  width: 30px;
+  flex-shrink: 0;
+}
+
+.message-content {
+  flex: 1;
+  max-width: 68%;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-own .message-content {
+  align-items: flex-end;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 12px;
+  padding: 0 4px;
+}
+
+.message-own .message-header {
+  flex-direction: row-reverse;
+}
+
+.message-username {
+  font-weight: 600;
+  color: #495057;
+}
+
+.message-timestamp {
+  color: #adb5bd;
+  font-size: 11px;
+}
+
+.message-bubble {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 18px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.message.message-first:not(.message-own) .message-bubble {
+  border-top-left-radius: 4px;
+}
+
+.message.message-own.message-first .message-bubble {
+  border-top-right-radius: 4px;
+}
+
+.message-own .message-bubble {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-color: transparent;
+}
+
+.system-message-content {
+  background: #f8f9fa;
+  color: #6c757d;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-style: italic;
+  font-size: 13px;
+  border: 1px solid #e9ecef;
+}
+
+.message-text {
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.message-link {
+  color: #667eea;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.message-own .message-link {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .message-content {
+    max-width: 82%;
+  }
+}
