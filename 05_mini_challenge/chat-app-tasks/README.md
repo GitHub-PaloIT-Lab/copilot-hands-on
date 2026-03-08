@@ -2,6 +2,22 @@
 
 This directory contains individual task files for building the React chat application step by step.
 
+# Prompt
+สร้างแอปแชทแบบ real-time
+Frontend: React.js + Socket.io-client
+Backend: Node.js + Express.js + Socket.io
+
+✨ ฟีเจอร์หลัก
+การส่งข้อความแบบ real-time - ข้อความแสดงทันทีสำหรับทุกคน
+รายชื่อผู้ใช้ออนไลน์ - แสดงว่าใครกำลังออนไลน์อยู่
+Typing Indicators - แสดงว่าใครกำลังพิมพ์ข้อความ
+Join/Leave notifications - แจ้งเตือนเมื่อมีคนเข้า/ออกห้องแชท
+
+📁 โครงสร้าง Tasks (10 tasks)
+Task 1-3	Phase 1: ตั้งค่าโปรเจกต์, Server, React
+Task 4-6	Phase 2: Socket.io, Message Broadcasting, Typing
+Task 7-10	Phase 3-4: React Components (App, JoinForm, ChatRoom, Messages)
+
 ## 📁 File Structure
 
 ### Phase 1: Project Setup & Configuration
