@@ -31,6 +31,12 @@ const io = socketIo(server, {
 const users = new Map();
 const messageHistory = [];
 const typingUsers = new Map(); // socketId -> { username, timeout }
+let messageIdCounter = 0;
+
+const generateMessageId = () => {
+  messageIdCounter += 1;
+  return `msg_${Date.now()}_${messageIdCounter}`;
+};
 
 // Socket connection handling
 io.on('connection', (socket) => {
@@ -74,7 +80,7 @@ io.on('connection', (socket) => {
 
     // Notify others about new user (system message)
     const joinMessage = {
-      id: Date.now() + Math.random(),
+      id: generateMessageId(),
       username: 'System',
       message: `${user.username} joined the chat`,
       timestamp: new Date().toISOString(),
@@ -114,7 +120,7 @@ io.on('connection', (socket) => {
 
     // Create message object
     const message = {
-      id: Date.now() + Math.random(),
+      id: generateMessageId(),
       username: user.username,
       message: sanitizedMessage,
       timestamp: new Date().toISOString(),
@@ -191,7 +197,7 @@ io.on('connection', (socket) => {
 
       // Broadcast system message about user leaving
       const leaveMessage = {
-        id: Date.now() + Math.random(),
+        id: generateMessageId(),
         username: 'System',
         message: `${user.username} left the chat`,
         timestamp: new Date().toISOString(),

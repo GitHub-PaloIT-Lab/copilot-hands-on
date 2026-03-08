@@ -104,13 +104,58 @@ function App() {
   const leaveChat = () => {
     if (socket) {
       socket.disconnect();
-      setIsJoined(false);
-      setUsername('');
-      setMessages([]);
-      setUsers([]);
-      setTypingUsers([]);
-      window.location.reload();
     }
+    setIsJoined(false);
+    setUsername('');
+    setMessages([]);
+    setUsers([]);
+    setTypingUsers([]);
+    setIsJoining(false);
+
+    // Reconnect socket for next join
+    const newSocket = io(SERVER_URL, {
+      transports: ['websocket', 'polling']
+    });
+
+    newSocket.on('connect', () => {
+      setIsConnected(true);
+      setConnectionError('');
+    });
+
+    newSocket.on('disconnect', () => {
+      setIsConnected(false);
+      setIsJoined(false);
+      setIsJoining(false);
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
+      setConnectionError('Failed to connect to server. Please make sure the server is running.');
+      setIsConnected(false);
+    });
+
+    newSocket.on('welcome', () => {
+      setIsJoined(true);
+      setIsJoining(false);
+    });
+
+    newSocket.on('error', (error) => {
+      console.error('Socket error:', error);
+      setIsJoining(false);
+      alert('Error: ' + error);
+    });
+
+    newSocket.on('userList', (userList) => setUsers(userList));
+    newSocket.on('message', (message) => setMessages((prev) => [...prev, message]));
+    newSocket.on('messageHistory', (history) => setMessages(history));
+    newSocket.on('typing_start', (data) => {
+      setTypingUsers((prev) => (!prev.includes(data.username) ? [...prev, data.username] : prev));
+    });
+    newSocket.on('typing_stop', (data) => {
+      setTypingUsers((prev) => prev.filter((u) => u !== data.username));
+    });
+
+    setSocket(newSocket);
   };
 
   // Send message
