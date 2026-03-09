@@ -1,0 +1,84 @@
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.connection-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-badge.connected {
+  background: rgba(40, 167, 69, 0.2);
+  border: 1px solid rgba(40, 167, 69, 0.4);
+}
+
+.status-badge.disconnected {
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid rgba(220, 53, 69, 0.4);
+}
+
+.connection-error {
+  font-size: 12px;
+  color: #ffb3b3;
+  margin-top: 4px;
+  text-align: right;
+  max-width: 300px;
+}
+
+.App-main {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 1rem;
+  background-color: #f5f5f5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .App-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .connection-status {
+    align-items: flex-start;
+  }
+
+  .App-main {
+    padding: 0;
+  }
+}
