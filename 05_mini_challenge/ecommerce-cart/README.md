@@ -1,9 +1,11 @@
 # E-commerce Cart System 🛒
 
-ระบบตะกร้าสินค้าที่มีฟีเจอร์ครบครันสำหรับ E-commerce
+ระบบรายการสินค้าและตะกร้าสินค้าที่มีฟีเจอร์ครบครันสำหรับ E-commerce
 
 ## ฟีเจอร์ที่รองรับ ✨
 
+- ✅ **หน้าแสดงรายการสินค้า** - แสดงรายการสินค้าและราคารวม
+- ✅ **หน้าแสดงรายการละเอียดสินค้า** - แสดงรายละเอียดสินค้าและราคา รวมถึงตัวเลือก เช่น สี
 - ✅ **เพิ่มสินค้าลงตะกร้า** - เพิ่มสินค้าพร้อม id, name, price, quantity
 - ✅ **ลบสินค้าออกจากตะกร้า** - ลบสินค้าทั้งหมดออกจากตะกร้า
 - ✅ **อัพเดทจำนวนสินค้า** - เปลี่ยนจำนวนสินค้าในตะกร้า
@@ -11,30 +13,78 @@
 - ✅ **คำนวณส่วนลด** - ส่วนลด 10% เมื่อซื้อครบ 1,000 บาท
 - ✅ **แสดงสรุปคำสั่งซื้อ** - แสดงรายการสินค้าและราคารวม
 
+## เทคโนโลยีที่ใช้ 🛠️
+
+- **Frontend**: React.js
+- **Backend**: Node.js + Express.js
+- **Testing**: Jest + Supertest + React Testing Library
+
 ## ไฟล์ในโปรเจ็กต์ 📁
 
 ```
 ecommerce-cart/
-├── cart-system.js    # คลาสหลักของระบบตะกร้า
-├── cart-demo.html    # หน้าเว็บสำหรับทดสอบ
-└── README.md         # เอกสารนี้
+├── cart-system.js         # คลาสหลักของระบบตะกร้า
+├── cart-demo.html         # หน้าเว็บสำหรับทดสอบ (Vanilla JS)
+├── README.md              # เอกสารนี้
+├── backend/               # Backend API (Node.js + Express.js)
+│   ├── package.json
+│   ├── server.js          # Express API server
+│   ├── data/
+│   │   └── products.js    # ข้อมูลสินค้าตัวอย่าง
+│   └── __tests__/
+│       ├── cart-system.test.js  # Unit tests สำหรับ ShoppingCart
+│       └── server.test.js       # API integration tests
+└── frontend/              # Frontend (React.js)
+    ├── package.json
+    ├── public/
+    │   └── index.html
+    └── src/
+        ├── App.js         # Main App component
+        ├── App.css        # Styles
+        ├── App.test.js    # Frontend tests
+        ├── context/
+        │   └── CartContext.js    # Cart state management
+        └── components/
+            ├── ProductList.js    # หน้าแสดงรายการสินค้า
+            ├── ProductDetail.js  # หน้าแสดงรายละเอียดสินค้า
+            └── Cart.js           # ตะกร้าสินค้าและสรุปคำสั่งซื้อ
 ```
 
 ## วิธีใช้งาน 🚀
 
-### 1. การใช้งานใน Web Browser
+### 1. รัน Backend API
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+Server จะรันที่ `http://localhost:3001`
+
+### 2. รัน Frontend (React)
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+App จะเปิดที่ `http://localhost:3000`
+
+### 3. การใช้งานแบบ Vanilla JS
 
 เปิดไฟล์ `cart-demo.html` ในเบราว์เซอร์เพื่อดูการทำงานแบบ interactive
 
-### 2. การใช้งานใน JavaScript
+### 4. การใช้งานใน JavaScript
 
 ```javascript
-// สร้าง instance ใหม่
+const ShoppingCart = require('./cart-system.js');
 const cart = new ShoppingCart();
 
-// เพิ่มสินค้าลงตะกร้า
-cart.addItem('phone', 'โทรศัพท์มือถือ', 15000, 1);
-cart.addItem('case', 'เคสโทรศัพท์', 350, 2);
+// เพิ่มสินค้าลงตะกร้า (รองรับ method chaining)
+cart.addItem('phone', 'โทรศัพท์มือถือ', 15000, 1)
+    .addItem('case', 'เคสโทรศัพท์', 350, 2);
 
 // อัพเดทจำนวนสินค้า
 cart.updateQuantity('phone', 2);
@@ -44,124 +94,48 @@ cart.removeItem('case');
 
 // ดูสรุปคำสั่งซื้อ
 cart.displayOrderSummary();
-
-// ได้ข้อมูลสรุปในรูปแบบ object
-const summary = cart.getOrderSummary();
-console.log(summary);
 ```
 
-### 3. การใช้งานใน Node.js
+## API Endpoints 📡
 
-```javascript
-const ShoppingCart = require('./cart-system.js');
+### Products
 
-const cart = new ShoppingCart();
-cart.addItem('item1', 'สินค้าตัวอย่าง', 500, 1);
-cart.displayOrderSummary();
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/products` | ดึงรายการสินค้าทั้งหมด |
+| GET | `/api/products/:id` | ดึงรายละเอียดสินค้า (พร้อมสี) |
+
+### Cart
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/cart` | ดึงข้อมูลตะกร้าสินค้า |
+| POST | `/api/cart/add` | เพิ่มสินค้าลงตะกร้า |
+| PUT | `/api/cart/update` | อัปเดตจำนวนสินค้า |
+| DELETE | `/api/cart/remove/:id` | ลบสินค้าออกจากตะกร้า |
+| DELETE | `/api/cart/clear` | ล้างตะกร้า |
+
+## การรัน Tests 🧪
+
+### Backend Tests
+
+```bash
+cd backend
+npm test
 ```
 
-## API Reference 📚
+### Frontend Tests
 
-### constructor()
-สร้าง instance ใหม่ของตะกร้าสินค้า
-
-### addItem(id, name, price, quantity = 1)
-เพิ่มสินค้าลงตะกร้า หรือเพิ่มจำนวนถ้ามีอยู่แล้ว
-
-**Parameters:**
-- `id` (string) - รหัสเฉพาะของสินค้า
-- `name` (string) - ชื่อสินค้า
-- `price` (number) - ราคาต่อหน่วย
-- `quantity` (number) - จำนวน (default: 1)
-
-### removeItem(id)
-ลบสินค้าออกจากตะกร้าทั้งหมด
-
-**Parameters:**
-- `id` (string) - รหัสสินค้าที่ต้องการลบ
-
-**Returns:** boolean - true ถ้าลบสำเร็จ
-
-### updateQuantity(id, quantity)
-อัพเดทจำนวนสินค้า (ถ้าจำนวนเป็น 0 หรือติดลบจะลบสินค้าออก)
-
-**Parameters:**
-- `id` (string) - รหัสสินค้า
-- `quantity` (number) - จำนวนใหม่
-
-**Returns:** boolean - true ถ้าอัพเดทสำเร็จ
-
-### calculateSubtotal()
-คำนวณราคารวมก่อนหักส่วนลด
-
-**Returns:** number - ราคารวมก่อนส่วนลด
-
-### calculateDiscount()
-คำนวณจำนวนเงินส่วนลด
-
-**Returns:** number - จำนวนเงินส่วนลด
-
-### calculateTotal()
-คำนวณราคารวมหลังหักส่วนลด
-
-**Returns:** number - ราคารวมสุทธิ
-
-### getOrderSummary()
-ได้ข้อมูลสรุปคำสั่งซื้อในรูปแบบ object
-
-**Returns:** object - ข้อมูลสรุปคำสั่งซื้อ
-
-### displayOrderSummary()
-แสดงสรุปคำสั่งซื้อใน console
-
-### clearCart()
-ล้างสินค้าทั้งหมดออกจากตะกร้า
-
-### getTotalItems()
-นับจำนวนสินค้าทั้งหมดในตะกร้า
-
-**Returns:** number - จำนวนสินค้าทั้งหมด
-
-## ตัวอย่างการใช้งาน 💡
-
-```javascript
-const cart = new ShoppingCart();
-
-// เพิ่มสินค้าหลายชิ้น
-cart.addItem('laptop', 'โน๊ตบุ๊ค', 25000, 1)
-    .addItem('mouse', 'เม้าส์', 500, 2)
-    .addItem('keyboard', 'คีย์บอร์ด', 1500, 1);
-
-// ตรวจสอบข้อมูล
-console.log(`จำนวนสินค้าทั้งหมด: ${cart.getTotalItems()} ชิ้น`);
-console.log(`ราคารวม: ฿${cart.calculateTotal()}`);
-
-// แสดงสรุปคำสั่งซื้อ
-cart.displayOrderSummary();
+```bash
+cd frontend
+npm test
 ```
-
-## การทดสอบ 🧪
-
-เปิดไฟล์ `cart-demo.html` ในเบราว์เซอร์และทดสอบฟีเจอร์ต่างๆ:
-
-1. **เพิ่มสินค้า** - คลิกปุ่ม "เพิ่มลงตะกร้า" ที่สินค้าต่างๆ
-2. **ปรับจำนวน** - ใช้ปุ่ม +/- หรือกรอกจำนวนโดยตรง
-3. **ลบสินค้า** - คลิกปุ่ม "ลบ" ที่สินค้าในตะกร้า
-4. **ดูส่วนลด** - เพิ่มสินค้าให้ครบ 1,000 บาทเพื่อดูส่วนลด 10%
-5. **ล้างตะกร้า** - คลิกปุ่ม "ล้างตะกร้า"
 
 ## ข้อกำหนดระบบส่วนลด 🎯
 
 - **เงื่อนไข**: ซื้อสินค้ารวมมากกว่า 1,000 บาท
 - **ส่วนลด**: 10% ของราคารวม
 - **การคำนวณ**: หักส่วนลดจากราคารวมก่อนส่วนลด
-
-## เทคโนโลยีที่ใช้ 🛠️
-
-- **Vanilla JavaScript** - สำหรับโลจิกหลัก
-- **HTML5 + CSS3** - สำหรับส่วน UI
-- **ES6 Classes** - สำหรับโครงสร้าง OOP
-- **Responsive Design** - รองรับหน้าจอทุกขนาด
 
 ---
 
