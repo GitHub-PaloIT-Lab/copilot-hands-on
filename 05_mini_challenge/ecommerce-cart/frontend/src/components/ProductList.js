@@ -15,7 +15,8 @@ function ProductList({ onSelectProduct }) {
                 setProducts(data);
                 setLoading(false);
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error('โหลดข้อมูลสินค้าจาก API ไม่สำเร็จ:', err.message);
                 // ใช้ข้อมูลตัวอย่างถ้า API ไม่ตอบ
                 setProducts([
                     { id: 'phone', name: 'โทรศัพท์มือถือ', price: 15000, category: 'อิเล็กทรอนิกส์' },

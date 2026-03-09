@@ -9,11 +9,15 @@ function ProductDetail({ productId, onBack }) {
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
     const [added, setAdded] = useState(false);
+    const [error, setError] = useState(null);
     const { addItem } = useCart();
 
     useEffect(() => {
         fetch(`${API_URL}/api/products/${productId}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('ไม่พบสินค้า');
+                return res.json();
+            })
             .then(data => {
                 setProduct(data);
                 if (data.colors && data.colors.length > 0) {
@@ -21,7 +25,9 @@ function ProductDetail({ productId, onBack }) {
                 }
                 setLoading(false);
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error('โหลดข้อมูลสินค้าไม่สำเร็จ:', err.message);
+                setError(err.message);
                 setLoading(false);
             });
     }, [productId]);
@@ -43,7 +49,12 @@ function ProductDetail({ productId, onBack }) {
     };
 
     if (loading) return <div className="loading">กำลังโหลดข้อมูลสินค้า...</div>;
-    if (!product) return <div className="error">ไม่พบสินค้า</div>;
+    if (error || !product) return (
+        <div className="product-detail">
+            <button className="btn btn-back" onClick={onBack}>← กลับไปหน้ารายการสินค้า</button>
+            <div className="error">❌ {error || 'ไม่พบสินค้า'}</div>
+        </div>
+    );
 
     return (
         <div className="product-detail">
